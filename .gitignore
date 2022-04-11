@@ -1,2 +1,7 @@
-nofib/
-demos/
+*
+
+!.gitignore
+
+!resources/benchmarks.txt
+!resources/flags.txt
+!resources/optimizations.csv
