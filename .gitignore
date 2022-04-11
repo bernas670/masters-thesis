@@ -1,7 +1,10 @@
-*
+/bin
+/corediff
+/ghc-dump
+/ghc-dump-src
+/nofib
+/nofib-broken
 
-!.gitignore
-
-!resources/benchmarks.txt
-!resources/flags.txt
-!resources/optimizations.csv
+/src/test
+/test
+/tmp
