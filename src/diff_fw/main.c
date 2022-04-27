@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 
             char* results[1024];
             sprintf(results, "%s,%s,%s,%d,%d\n", timestamp, line, flags.data[i], sim.insertions, sim.deletions);
-            file_append("../tmp/results.csv", results);
+            file_append("tmp/results.csv", results);
 
             free(opt_path);
         }

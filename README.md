@@ -1,5 +1,10 @@
 # thesis
 
+## `stack`
+
+`stack exec -- corediff-exe diff ... ...`
+`stack exec -- ghc -fplugin GhcDump.Plugin ...`
+
 ## GHC 8.8.4 Optimization Flags
 [Extracted list of flags](flags.txt) from [here](https://downloads.haskell.org/~ghc/8.8.4/docs/html/users_guide/using-optimisation.html) using the following XPath expression and removing the `-O*` flags.
 ```xpath
@@ -9,7 +14,10 @@
 ## `nofib` Makefile
 
 `cabal v1-install --allow-newer -w ghc random parallel old-time`
+
 `cabal v1-install regex-compat`
+
+`-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d`
 
 In [`boilerplate.mk`](nofib/mk/boilerplate.mk)
 
@@ -42,8 +50,33 @@ moss -d
 ```
 find nofib -type d >> resources/benchmarks.txt
 ```
+
+```
+find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||' | sort >> resources/bench_test.txt
+```
+
+`find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||' | sort | uniq`
+`find nofib -type f -name "*.lhs" | sed -r 's|/[^/]+$||' | sort | uniq`
+```bash
+# 1st find gets all directories with a Makefile
+# 2nd find gets all directories with .lhs files (these don't work with ghc-dump)
+comm -23 <(find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||' | sort | uniq) <(find nofib -type f -name "*.lhs" | sed -r 's|/[^/]+$||' | sort | uniq) >> resources/bench_test.txt
+```
+
+```
+comm -12 <(find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||') <(find nofib -type d '!' -exec test -e "{}/*.lhs" ';' -print) >> resources/bench_test.txt
+```
+
+find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||'
+find nofib -type d '!' -exec test -e "{}/*.lhs" ';' -print'
+
  - removed `.git` directories
  - removed other non-benchmark directories
+
+## RAPL
+
+- power plane 0 - core measurements
+- power plane 1 - uncore measurements, see [here](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 
 
 #### Notes

@@ -1,18 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
 
-// 1st - command to run
-// 2nd - program name
-// 3rd - compilation flags
-int main(int argc, char *argv[]) {
+// read programs
+// read flags
 
-    for (int i = 0; i < argc; i++) {
-        printf("%s\n", argv[i]);
-    }
+// for each program
+    // for each flag
+        // compile
+            // add this to compilation command '-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d'
+            // active flag should always be last
+        // run
+        // make clean
 
-    system("pwd");
-    system(argv[1]);
-    system("pwd");
-
-    return 0;
-}
+// done

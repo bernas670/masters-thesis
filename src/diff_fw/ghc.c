@@ -29,13 +29,13 @@ char* compile(char *path, char *flag)
 {
     // create results directory
     char res[1024];
-    sprintf(res, "../tmp/%s/%s", path, flag);
+    sprintf(res, "tmp/%s/%s", path, flag);
     mkpath(res);
 
     char *root = getcwd(NULL, 0);
 
     // change to benchmark directory
-    chdir("../nofib");
+    chdir("./nofib");
     if (chdir(path) != 0) {
         // FIXME: abort
         printf("==> Could not change directory to: %s\n==> PWD: %s\n", path, getcwd(NULL, 0));
@@ -45,7 +45,7 @@ char* compile(char *path, char *flag)
     // compile benchmark
     char make_cmd[1024];
     printf("==> compiling %s with flag: %s\n", path, flag);
-    printf("pwd: %s\n", getcwd(NULL, 0));
+    // printf("pwd: %s\n", getcwd(NULL, 0));
     // sprintf(make_cmd, "make NoFibRuns=0 EXTRA_HC_OPTS=\"-O0 -fplugin GhcDump.Plugin %s\"", flag);
     sprintf(make_cmd, "make NoFibRuns=0 EXTRA_HC_OPTS=\"-O0 -fplugin GhcDump.Plugin %s\" >null 2>null", flag);
     // FIXME: check compilation status
@@ -85,7 +85,7 @@ char* compile(char *path, char *flag)
         sprintf(cmd, "cp %s %s/%s/%s.cbor", buffer, root, res, filename);
         system(cmd);
 
-        sprintf(cmd, "%s/../bin/cbor-txt %s %s/%s/%s.txt", root, buffer, root, res, filename);
+        sprintf(cmd, "%s/bin/cbor-txt %s %s/%s/%s.txt", root, buffer, root, res, filename);
         system(cmd);
     }
 

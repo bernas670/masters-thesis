@@ -1,15 +1,27 @@
 #include "corediff.h"
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdio.h>
 
 
 corediff_sim corediff(char* base, char* opt) {
+
+    // printf("==> base : %s \n", base);
+    // printf("==> entered corediff function\n");
+
     char* cmd[2048], filename[254];
     FILE *cbor_fp;
 
-    char* root = getecwd(NULL, 0);
+    char* root = getcwd(NULL, 0);
+
+    // printf("==> here 1\n");
+
+    chdir("tmp");
     chdir(base);
+    // printf("==> here 2\n");
+
+    // printf("==> pwd : %s\n", getcwd(NULL, 0));
 
     if ((cbor_fp = popen("find *.cbor", "r")) == NULL) {
         printf("Error looking for .cbor files.");
@@ -24,9 +36,14 @@ corediff_sim corediff(char* base, char* opt) {
     // iterate through cbor files
     while(fgets(filename, sizeof(filename), cbor_fp) != NULL) {
 
+        filename[strlen(filename) - 1] = 0;
+
         sprintf(cmd, 
-            "./../bin/corediff diff %s/%s %s/%s | ansi2txt | awk \"/^- / { ++r1 } /^\\+ / { ++r2 }\"' END { print \"del:\",r1 \"\\nins:\",r2 }'", 
+            "stack exec -- corediff-exe diff tmp/%s/%s tmp/%s/%s | ansi2txt | awk \"/^- / { ++r1 } /^\\+ / { ++r2 }\"' END { print \"del:\",r1 \"\\nins:\",r2 }'", 
             base, filename, opt, filename);
+        
+        printf("==> corediff : diffing %s\n", filename);
+        // printf(cmd);
 
         FILE *cmd_fp;
         if ((cmd_fp = popen(cmd, "r")) == NULL) {
