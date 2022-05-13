@@ -12,6 +12,6 @@ typedef struct str_arr
  * @param filename path to file
  * @return str_arr resulting array
  */
-str_arr file2arr(char* filename);
+str_arr file2arr(const char* filename);
 
-int file_append(char* filename, char* data);
+int file_append(const char* filename, const char* data);

@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdio.h>
 
 
 corediff_sim corediff(char* base, char* opt) {

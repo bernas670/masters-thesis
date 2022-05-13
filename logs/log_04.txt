@@ -1,0 +1,15 @@
+COOLDOWN ==> 45 seconds
+ERROR ==> program: parallel/blackscholes | flag: -O0
+ERROR ==> program: parallel/blackscholes | flag: -fcase-merge
+ERROR ==> program: parallel/coins | flag: -O0
+ERROR ==> program: parallel/coins | flag: -fcase-merge
+TEMPS ==> CPU1: 11.900000 CPU2: 12.175000
+ERROR ==> program: parallel/blackscholes | flag: -O0
+ERROR ==> program: parallel/blackscholes | flag: -fcase-merge
+ERROR ==> program: parallel/coins | flag: -O0
+ERROR ==> program: parallel/coins | flag: -fcase-merge
+TEMPS ==> CPU1: 44.800000 CPU2: 46.800000
+ERROR ==> program: parallel/blackscholes | flag: -O0
+ERROR ==> program: parallel/blackscholes | flag: -fcase-merge
+ERROR ==> program: parallel/coins | flag: -O0
+ERROR ==> program: parallel/coins | flag: -fcase-merge

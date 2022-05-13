@@ -9,7 +9,9 @@ METR = ${SRC}/metrics_fw
 UTIL = ${SRC}/utils
 
 
-all: diff cbor-txt
+diff-all: diff cbor-txt
+
+energy-all: energy-read metrics
 
 diff:
 	gcc ${DIFF}/*.c ${DIFF}/*.h ${UTIL}/files.c ${UTIL}/files.h -o ${BIN}/diff
@@ -19,10 +21,10 @@ cbor-txt:
 	rm ${SRC}/*.hi ${SRC}/*.o
 
 energy-read:
-	gcc -O2 -Wall -o ${BIN}/energy-read ${ENRG}/*.c ${ENRG}/*.h ${UTIL}/files.c ${UTIL}/files.h -lm
+	gcc -O2 -Wall -o ${BIN}/energy-read ${ENRG}/*.c ${ENRG}/*.h ${UTIL}/files.c ${UTIL}/files.h ${UTIL}/macros.h ${UTIL}/cpu.h ${UTIL}/cpu.c -lm
 
 metrics:
-	gcc -O2 -Wall -o ${BIN}/energy-read ${METR}/*.c ${METR}/*.h ${UTIL}/files.c ${UTIL}/files.h -lm
+	gcc -O2 -Wall -o ${BIN}/metrics ${METR}/*.c ${METR}/*.h ${UTIL}/files.c ${UTIL}/files.h ${UTIL}/macros.h ${UTIL}/cpu.h ${UTIL}/cpu.c
 
 clean:
 	rm ${BIN}/*

@@ -536,7 +536,9 @@ static pkg_arr rapl_msr(int core, int cpu_model, char *cmd) {
 	struct timeval stop, start;
 	gettimeofday(&start, NULL);
 
-	system(cmd);
+	int ret_code = system(cmd);
+	printf("==> program return code : %d\n", ret_code);
+
 
 	gettimeofday(&stop, NULL);
 	ret.time = (double) ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec) / 1000.0f;

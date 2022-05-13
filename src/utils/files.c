@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
 
 #include "files.h"
 
@@ -7,7 +8,7 @@
 const size_t BUFF_INC = 20;
 
 
-str_arr file2arr(char* filename) {
+str_arr file2arr(const char* filename) {
     FILE *fp;
     str_arr arr = { .data = NULL, .size = -1 };
 
@@ -59,7 +60,7 @@ str_arr file2arr(char* filename) {
     return arr;
 }
 
-int file_append(char* filename, char* data) {
+int file_append(const char* filename, const char* data) {
     FILE* fp;
 
     if ((fp = fopen(filename, "a")) == NULL) {

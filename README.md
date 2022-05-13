@@ -75,8 +75,31 @@ find nofib -type d '!' -exec test -e "{}/*.lhs" ';' -print'
 
 ## RAPL
 
+ - Package: Package (PKG) domain measures the energy consumption of the entire socket. It
+includes the consumption of all the cores, integrated graphics and also the uncore components
+(last level caches, memory controller).
+ - Power Plane 0: Power Plane 0 (PP0) domain measures the energy consumption of all
+processor cores on the socket.
+ - Power Plane 1: Power Plane 1 (PP1) domain measures the energy consumption of processor
+graphics (GPU) on the socket (desktop models only).
+ - DRAM: DRAM domain measures the energy consumption of random access memory (RAM)
+attached to the integrated memory controller.
+ - PSys: Intel Skylake has introduced a new RAPL Domain named PSys. It monitors and controls
+the thermal and power specifications of the entire SoC and it is useful especially when the
+source of the power consumption is neither the CPU nor the GPU. As Figure 1 suggests, PSys
+includes the power consumption of the package domain, System Agent, PCH , eDRAM and a
+few more domains on a single socket SoC.
+
+**Note:** For multi-socket server systems, each socket reports its own RAPL values (for example a 2-socket
+computing system has two separate PKG readings for both the packages, two separate PP0 readings,
+etc).
+
+**Source:** [RAPL in Action: Experiences in Using RAPL for Power Measurements](https://helda.helsinki.fi/bitstream/handle/10138/321707/RAPL_in_Action_Experiences_in_Using_RAPL_for_Power_Measurements.pdf?sequence=1)
+
 - power plane 0 - core measurements
 - power plane 1 - uncore measurements, see [here](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
+
+
 
 
 #### Notes

@@ -1,0 +1,1 @@
+int compile(char *path, char *flag, int runs);

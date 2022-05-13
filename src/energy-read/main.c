@@ -2,29 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 
 #include "rapl-read.h"
+#include "../utils/macros.h"
 #include "../utils/files.h"
+#include "../utils/cpu.h"
 
 // 1st - command to run
 // 2nd - program name
 // 3rd - compilation flags
 int main(int argc, char *argv[]) {
 
-    for (int i = 0; i < argc; i++) {
-        printf("%s\n", argv[i]);
-    }
-
     char *cmd = argv[1];
     char *prog = argv[2];
-    char *flag = argv[3];
+    char *flag = strrchr(argv[3], ' ') + 1;
 
     pkg_arr rapl = rapl_read(cmd);
-
-    // TODO: process flag string
-
-
 
     // get timestamp
     time_t clk = time(NULL);
@@ -43,12 +38,18 @@ int main(int argc, char *argv[]) {
 
     sprintf(results, "%s\n", results);
 
-    if (file_append("/tera-linux/rapi/thesis/results.csv", results)) {
+    if (file_append(RES_FILE, results)) {
         printf("==> Error writing to file\n");
     }
 
-    // TODO: give the machine time to cooldown
-    // sleep(120);
+    // give the machine time to cooldown
+    int cooldown_time = await_cooldown(BASE_TEMPS, TEMP_RANGE, COOLDOWN);
+    // log compilation
+    char *log_str[512];            
+    sprintf(log_str, "COOLDOWN ==> %d seconds\n", cooldown_time);
+    file_append(LOG_FILE, log_str);
+
+    // sleep(COOLDOWN);
 
     return 0;
 }
