@@ -72,3 +72,31 @@ int file_append(const char* filename, const char* data) {
 
     return 0;
 }
+
+int file_write(const char* filename, const char* data) {
+    FILE* fp;
+
+    if ((fp = fopen(filename, "w")) == NULL) {
+        return 1;
+    }
+
+    fprintf(fp, "%s", data);
+    fclose(fp);
+
+    return 0;
+}
+
+char* file_readline(const char* filename) {
+    char* line = malloc(64);
+    FILE* fp;
+
+    if ((fp = fopen(filename, "r")) == NULL) {
+        return NULL;
+    }
+
+    if (fgets(line, 64, fp) == NULL)
+        printf("error");
+    fclose(fp);
+
+    return line;
+}

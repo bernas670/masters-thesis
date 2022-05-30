@@ -12,7 +12,6 @@ int compile(char *path, char *flag, int runs)
     // change to benchmark directory
     chdir("./nofib");
     if (chdir(path) != 0) {
-        // FIXME: abort
         printf("==> Could not change directory to: %s\n==> PWD: %s\n", path, getcwd(NULL, 0));
         return 1;
     }
@@ -20,11 +19,10 @@ int compile(char *path, char *flag, int runs)
     // compile benchmark
     char make_cmd[1024];
     printf("==> compiling %s with flag: %s\n", path, flag);
-    sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d -O0 %s\" >null 2>null", runs, flag);
-    // FIXME: check compilation status
+    // sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d -O0 %s\" >null 2>null", runs, flag);
+    sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d -O0 %s\"", runs, flag);
 
     int ret;
-
     if ((ret = system(make_cmd)) == 0) {
         printf("==> %s successfuly compiled with flag: %s\n", path, flag);
     } else {

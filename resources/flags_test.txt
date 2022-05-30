@@ -1,2 +1,4 @@
 -O0
 -fcase-merge
+-fcase-folding
+-fcall-arity

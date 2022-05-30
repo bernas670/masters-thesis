@@ -31,11 +31,16 @@ int main(int argc, char *argv[])
     }
 
     // calculate temperature baseline
-    BASE_TEMPS = get_baseline(5, COOLDOWN);
-    char *log_str[512];            
-    sprintf(log_str, "TEMPS ==> CPU1: %f CPU2: %f\n", BASE_TEMPS[0], BASE_TEMPS[1]);
-    file_append(LOG_FILE, log_str);
+    double *base_temps = get_baseline(NUM_BASELINE, COOLDOWN);
+    char *log_str[512];
 
+    // write temps to file
+    sprintf(log_str, "%f %f", base_temps[0], base_temps[1]);
+    file_write(TEMP_FILE, log_str);
+
+    // log temperatures   
+    sprintf(log_str, "TEMPS ==> CPU1: %f CPU2: %f\n", base_temps[0], base_temps[1]);
+    file_append(LOG_FILE, log_str);
 
     // for each program
     while ((read = getline(&program, &len, programs_fp)) != -1)

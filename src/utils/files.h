@@ -15,3 +15,5 @@ typedef struct str_arr
 str_arr file2arr(const char* filename);
 
 int file_append(const char* filename, const char* data);
+int file_write(const char* filename, const char* data);
+char* file_readline(const char* filename);

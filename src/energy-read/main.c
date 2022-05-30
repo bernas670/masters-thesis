@@ -19,6 +19,20 @@ int main(int argc, char *argv[]) {
     char *prog = argv[2];
     char *flag = strrchr(argv[3], ' ') + 1;
 
+    // read temps from file
+    char* line = file_readline(TEMP_FILE);
+    double temps[2];
+    sscanf(line, "%lf %lf", &temps[0], &temps[1]);
+    free(line);
+
+    // give the machine time to cooldown
+    int cooldown_time = await_cooldown(temps, TEMP_RANGE, COOLDOWN);
+
+    // log compilation
+    char *log_str[512];          
+    sprintf(log_str, "COOLDOWN ==> %d seconds\n", cooldown_time);
+    file_append(LOG_FILE, log_str);
+
     pkg_arr rapl = rapl_read(cmd);
 
     // get timestamp
@@ -26,7 +40,7 @@ int main(int argc, char *argv[]) {
     char* timestamp = strtok(ctime(&clk), "\n");
 
     char* results[2048];
-    // timestamp, program, flag, execution time, pkg energy, pp0, pp1, dram, psys, ...
+    // timestamp, program, flag, execution time
     sprintf(results, "%s,%s,%s,%f", timestamp, prog, flag, rapl.time);
 
     // iterate through packages
@@ -41,15 +55,6 @@ int main(int argc, char *argv[]) {
     if (file_append(RES_FILE, results)) {
         printf("==> Error writing to file\n");
     }
-
-    // give the machine time to cooldown
-    int cooldown_time = await_cooldown(BASE_TEMPS, TEMP_RANGE, COOLDOWN);
-    // log compilation
-    char *log_str[512];            
-    sprintf(log_str, "COOLDOWN ==> %d seconds\n", cooldown_time);
-    file_append(LOG_FILE, log_str);
-
-    // sleep(COOLDOWN);
 
     return 0;
 }
