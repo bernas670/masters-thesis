@@ -34,7 +34,7 @@ int await_cooldown(const double* base_temps, double range, int delta) {
     int cooldown_time = 0;
     int cooled = 0;
     
-    while (cooled != 3) {
+    while (cooled != NUM_COOLDOWN) {
         sleep(delta);
         cooldown_time += delta;
         double *curr_temps = cpu_temp();
@@ -46,14 +46,16 @@ int await_cooldown(const double* base_temps, double range, int delta) {
             }
         }
 
-        char *log_str[512];            
-        sprintf(log_str, "TEMPS ==> CURR: %f %f | BASE: %f %f\n", curr_temps[0], curr_temps[1], base_temps[0], base_temps[1]);
+        char *log_str[512];
+        // TODO: generalize this 
+        // sprintf(log_str, "TEMPS ==> CURR: %f %f | BASE: %f %f\n", curr_temps[0], curr_temps[1], base_temps[0], base_temps[1]);
+        sprintf(log_str, "TEMPS ==> CURR: %f | BASE: %f \n", curr_temps[0], base_temps[0]);
         file_append(LOG_FILE, log_str);
 
 
         free(curr_temps);
         
-        if (in_range == 2) {
+        if (in_range == NUM_CPUS) {
             cooled++;
         } else {
             cooled = 0;

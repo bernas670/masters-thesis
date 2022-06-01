@@ -63,7 +63,7 @@ str_arr file2arr(const char* filename) {
 int file_append(const char* filename, const char* data) {
     FILE* fp;
 
-    if ((fp = fopen(filename, "a")) == NULL) {
+    if ((fp = fopen(filename, "a+")) == NULL) {
         return 1;
     }
 

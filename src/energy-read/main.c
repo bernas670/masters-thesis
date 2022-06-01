@@ -19,10 +19,13 @@ int main(int argc, char *argv[]) {
     char *prog = argv[2];
     char *flag = strrchr(argv[3], ' ') + 1;
 
+    // TODO: generalize this
     // read temps from file
     char* line = file_readline(TEMP_FILE);
-    double temps[2];
-    sscanf(line, "%lf %lf", &temps[0], &temps[1]);
+    // double temps[2];
+    // sscanf(line, "%lf %lf", &temps[0], &temps[1]);
+    double temps[1];
+    sscanf(line, "%lf", &temps[0]);
     free(line);
 
     // give the machine time to cooldown

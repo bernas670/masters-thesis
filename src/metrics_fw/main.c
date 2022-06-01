@@ -35,11 +35,14 @@ int main(int argc, char *argv[])
     char *log_str[512];
 
     // write temps to file
-    sprintf(log_str, "%f %f", base_temps[0], base_temps[1]);
+    // sprintf(log_str, "%f %f", base_temps[0], base_temps[1]);
+    sprintf(log_str, "%f", base_temps[0]);
     file_write(TEMP_FILE, log_str);
 
     // log temperatures   
-    sprintf(log_str, "TEMPS ==> CPU1: %f CPU2: %f\n", base_temps[0], base_temps[1]);
+    // TODO: generalize this
+    // sprintf(log_str, "TEMPS ==> CPU1: %f CPU2: %f\n", base_temps[0], base_temps[1]);
+    sprintf(log_str, "TEMPS ==> CPU: %f\n", base_temps[0]);
     file_append(LOG_FILE, log_str);
 
     // for each program
