@@ -12,7 +12,7 @@
 # earlier, but we don't for cosmetic reasons (see end of file).
 PRE_SRCS := $(ALL_SRCS)
 
-HC = stack ghc -- 
+# HC = stack ghc -- 
 # Only do this in leaf directories (important, this)
 
 nofib-dist-pre::
@@ -92,9 +92,6 @@ energy_runtest = \
 	  $(RUNTEST_OPTS) $(PROG_ARGS)" \
 	  $(NOFIB_PROG) \
 	  "$(EXTRA_HC_OPTS)"
-
-
-	  
 
 enum = $(strip $(shell perl -e 'for ($$i = 1; $$i <= $(1); $$i++) { print "$$i "; }'))
 
