@@ -35,3 +35,7 @@ spectral/banner
 -fcase-merge
 -fcase-folding
 -fcall-arity
+-fexitification
+-fcmm-elim-common-blocks
+-fcmm-sink
+-fcpr-anal
