@@ -1,4 +1,8 @@
--fexitification
--fcmm-elim-common-blocks
--fcmm-sink
--fcpr-anal
+-fdo-lambda-eta-expansion
+-ffloat-in
+-ffull-laziness
+-fignore-asserts
+-fliberate-case
+-floopification
+-fllvm-pass-vectors-in-regs
+-fspec-constr

@@ -5,8 +5,8 @@
 #define FLAG_FILE "./resources/flags_test.txt"
 
 #define TEMP_FILE "/home/bernas/thesis/resources/temps.txt"
-#define RES_FILE  "/home/bernas/thesis/results/res_07.csv"
-#define LOG_FILE  "/home/bernas/thesis/logs/log_07.txt"
+#define RES_FILE  "/home/bernas/thesis/results/res_09.csv"
+#define LOG_FILE  "/home/bernas/thesis/logs/log_09.txt"
 
 
 // number of times each program is executed

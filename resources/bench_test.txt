@@ -11,7 +11,7 @@ real/compress2
 shootout/binary-trees
 shootout/fasta
 shootout/k-nucleotide
-shootout/pidigits           
+shootout/pidigits
 smp/callback001
 smp/callback002
 smp/chan
