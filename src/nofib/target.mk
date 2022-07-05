@@ -69,12 +69,12 @@ runtests ::
 	@$(RM) $(STDIN)
 else 
 
-time_runtest = \
-	$(TIME) $(RUNTEST) ./$< \
-	  $(addprefix -i  ,$(STDIN_FILE)) \
-	  $(addprefix -o1 ,$(wildcard $(NOFIB_PROG).$(mode)stdout*) $(wildcard $(NOFIB_PROG).stdout*)) \
-	  $(addprefix -o2 ,$(wildcard $(NOFIB_PROG).$(mode)stderr*) $(wildcard $(NOFIB_PROG).stderr*)) \
-	  $(RUNTEST_OPTS) $(PROG_ARGS)
+# time_runtest = \
+# 	$(TIME) $(RUNTEST) ./$< \
+# 	  $(addprefix -i  ,$(STDIN_FILE)) \
+# 	  $(addprefix -o1 ,$(wildcard $(NOFIB_PROG).$(mode)stdout*) $(wildcard $(NOFIB_PROG).stdout*)) \
+# 	  $(addprefix -o2 ,$(wildcard $(NOFIB_PROG).$(mode)stderr*) $(wildcard $(NOFIB_PROG).stderr*)) \
+# 	  $(RUNTEST_OPTS) $(PROG_ARGS)
 
 
 # TODO: CHANGED THIS
