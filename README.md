@@ -58,11 +58,19 @@ The macros file (`src/utils/macros.h`) can be modified to configure the behaviou
 
 If you don't want the benchmarks to print anything to the terminal you can go into `src/metrics_fw/ghc.c` and change line 24:
 ```c
+<<<<<<< HEAD
 // from this
 sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\"", runs, flag);
 
 // to this
 sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\" >null 2>null", runs, flag);
+=======
+    // from this
+    sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\"", runs, flag);
+
+    // to this
+    sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\" >null 2>null", runs, flag);
+>>>>>>> 1f24eb1345e06d64fa545419f5ad1860dbd14daf
 ```
 
 ___
