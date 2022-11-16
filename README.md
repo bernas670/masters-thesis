@@ -1,112 +1,100 @@
 # thesis
 
-## `stack`
+## Setup
 
-`stack exec -- corediff-exe diff ... ...`
-`stack exec -- ghc -fplugin GhcDump.Plugin ...`
-
-## GHC 8.8.4 Optimization Flags
-[Extracted list of flags](flags.txt) from [here](https://downloads.haskell.org/~ghc/8.8.4/docs/html/users_guide/using-optimisation.html) using the following XPath expression and removing the `-O*` flags.
-```xpath
-//*[@class="ghc-flag"]//code[@class="sig-name descname"]
+Compile tool binaries
+```
+make energy-read
+make metrics
 ```
 
-## `nofib` Makefile
-
-`cabal v1-install --allow-newer -w ghc random parallel old-time`
-
-`cabal v1-install regex-compat`
-
-`-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d`
-
-In [`boilerplate.mk`](nofib/mk/boilerplate.mk)
-
-| File | Before | After |
-|:-----|:-------|:------|
-| [`boilerplate.mk, line 45`](nofib/mk/boilerplate.mk#L45) | `# Haskell compiler options for nofib`<br>`NoFibHcOpts = -O2 -Wno-tabs` | `# Haskell compiler options for nofib`<br>`NoFibHcOpts = -O0 -Wno-tabs` |
-|[`boilerplate.mk, line 48`](nofib/mk/boilerplate.mk#L48) | `# Number of times to run each program`<br>`NoFibRuns = 5` | `# Number of times to run each program`<br>`NoFibRuns = 0` |
-
-
-| Command | Description |
-|:--------|:------------|
-| `make clean` | **will this remove the generated input files??** |
-| `make boot`  | generate input files for the benchmarks and build compilation dependencies for `make` |
-| `make`       | builds benchmark and runs it `$NoFibRuns` times |
-| `make EXTRA_HC_OPTS="-fllvm"` | add extra compilation flags |
-| `make NoFibRuns=30` | builds benchmark and runs it `$NoFibRuns` times |
-
-
-## GHC-Dump
+Get `nofib` benchmarks from the repository (commit: `bca0196`)
 ```
-cabal install ghc-dump-core --lib
+git clone https://gitlab.haskell.org/ghc/nofib.git nofib
+cd nofib
+git checkout bca0196
+cd ..
 ```
 
-## Moss
+Switch `nofib`'s original `target.mk` for modified version
 ```
-moss -d
-```
+cp src/nofib/target.mk nofib/mk/target.mk
+``` 
 
-## nofib benchmarks
+Install packages required by `nofib` benchmarks
 ```
-find nofib -type d >> resources/benchmarks.txt
-```
-
-```
-find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||' | sort >> resources/bench_test.txt
+cabal v1-install --allow-newer -w ghc random parallel old-time
+cabal v1-install regex-compat
 ```
 
-`find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||' | sort | uniq`
-`find nofib -type f -name "*.lhs" | sed -r 's|/[^/]+$||' | sort | uniq`
-```bash
-# 1st find gets all directories with a Makefile
-# 2nd find gets all directories with .lhs files (these don't work with ghc-dump)
-comm -23 <(find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||' | sort | uniq) <(find nofib -type f -name "*.lhs" | sed -r 's|/[^/]+$||' | sort | uniq) >> resources/bench_test.txt
+___
+## Usage
+
+If everything is setup correctly you just need to run the `metrics` binary with root permissions, and the tool will start executing. `sudo` is required in order for `RAPL` to work.
+```
+sudo ./metrics
 ```
 
+___
+## Configuration
+
+The macros file (`src/utils/macros.h`) can be modified to configure the behaviour of the framework. *Remember to recompile to apply changes to this file.*
+| MACRO       | Description |
+|:-----------:|:------------|
+| `PROG_FILE` | relative path to the file that contains the paths to the benchmarks (ex: `resources/benchmarks.txt`) |
+| `FLAG_FILE` | relative path to file that contains the optimization flags (ex: `resources/flags.txt`) |
+| `TEMP_FILE` | absolute path to a `.txt` file that will hold the baseline temperature |
+| `RES_FILE`  | absolute path to a `.csv` file to which the results will be written | 
+| `LOG_FILE`  | absolute path to a `.txt` file to which the framework logs the execution |
+| `NUM_CPUS`  | number of CPUs in your system |
+| `NUM_RUNS`  | number of times each benchmark is executed with each flag |
+| `COOLDOWN`  | time to let system cool (seconds) |
+| `NUM_COOLDOWN`  | number of consecutive times the system is within the temperature range for it to be considered cooled |
+| `TEMP_RANGE`  | difference from the baseline for the system to be considered cooled |
+| `NUM_BASELINE`  | number of samples to be colected to establish the average temperature of the system |
+| `INT_BASELINE`  | interval between baseline sample collection (seconds) |
+
+<br>
+
+If you don't want the benchmarks to print anything to the terminal you can go into `src/metrics_fw/ghc.c` and change line 24:
+```c
+// from this
+sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\"", runs, flag);
+
+// to this
+sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\" >null 2>null", runs, flag);
 ```
-comm -12 <(find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||') <(find nofib -type d '!' -exec test -e "{}/*.lhs" ';' -print) >> resources/bench_test.txt
+
+___
+## Troubleshooting
+I had some trouble getting the `cabal` packages to work right away, here are the versions I used:
+```
+old-locale-1.0.0.7
+old-time-1.1.0.3
+parallel-3.2.2.0
+primitive-0.7.4.0
+random-1.2.1.1
+regex-base-0.94.0.2
+regex-compat-0.95.2.1
+regex-posix-0.96.0.1
+splitmix-0.1.0.4
+unboxed-ref-0.4.0.0
 ```
 
-find nofib -type f -name "Makefile" | sed -r 's|/[^/]+$||'
-find nofib -type d '!' -exec test -e "{}/*.lhs" ';' -print'
+<br>
 
- - removed `.git` directories
- - removed other non-benchmark directories
+Another issue I ran into was the package database not being found. The file can be found at `~/.ghc/<ghc-version>/package.conf.d`. To fix this issue go into `src/metrics_fw/ghc.c` and change line 24:
+```c
+// from this
+sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\"", runs, flag);
 
-## RAPL
+// to something like this
+sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d -O0 %s\"", runs, flag);
+```
 
- - Package: Package (PKG) domain measures the energy consumption of the entire socket. It
-includes the consumption of all the cores, integrated graphics and also the uncore components
-(last level caches, memory controller).
- - Power Plane 0: Power Plane 0 (PP0) domain measures the energy consumption of all
-processor cores on the socket.
- - Power Plane 1: Power Plane 1 (PP1) domain measures the energy consumption of processor
-graphics (GPU) on the socket (desktop models only).
- - DRAM: DRAM domain measures the energy consumption of random access memory (RAM)
-attached to the integrated memory controller.
- - PSys: Intel Skylake has introduced a new RAPL Domain named PSys. It monitors and controls
-the thermal and power specifications of the entire SoC and it is useful especially when the
-source of the power consumption is neither the CPU nor the GPU. As Figure 1 suggests, PSys
-includes the power consumption of the package domain, System Agent, PCH , eDRAM and a
-few more domains on a single socket SoC.
+___
+## Available Data
 
-**Note:** For multi-socket server systems, each socket reports its own RAPL values (for example a 2-socket
-computing system has two separate PKG readings for both the packages, two separate PP0 readings,
-etc).
+```csv
 
-**Source:** [RAPL in Action: Experiences in Using RAPL for Power Measurements](https://helda.helsinki.fi/bitstream/handle/10138/321707/RAPL_in_Action_Experiences_in_Using_RAPL_for_Power_Measurements.pdf?sequence=1)
-
-- power plane 0 - core measurements
-- power plane 1 - uncore measurements, see [here](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
-
-
-
-
-#### Notes
-[`-Wtabs`](https://downloads.haskell.org/~ghc/8.8.4/docs/html/users_guide/using-warnings.html?highlight=wno%20tabs#ghc-flag--Wtabs) warns about tabs in the source file.
-
-
-https://gitlab.haskell.org/ghc/ghc/-/wikis/building/running-nofib
-https://mpickering.github.io/users_guide/flags.html#options-f-compact
-https://github.com/greensoftwarelab/Energy-Languages
-
+```
