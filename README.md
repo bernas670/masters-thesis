@@ -63,6 +63,7 @@ sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\"", runs, flag)
 
 // to this
 sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\" >null 2>null", runs, flag);
+
 ```
 
 ___
