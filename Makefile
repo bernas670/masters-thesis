@@ -22,10 +22,12 @@ UTIL = ${SRC}/utils
 
 energy-read:
 	@mkdir -p ${BIN}
+	@mkdir -p logs
 	@gcc -O2 -w -o ${BIN}/energy-read ${ENRG}/*.c ${ENRG}/*.h ${UTIL}/files.c ${UTIL}/files.h ${UTIL}/macros.h ${UTIL}/cpu.h ${UTIL}/cpu.c -lm
 
 metrics:
 	@mkdir -p ${BIN}
+	@mkdir -p logs
 	@gcc -O2 -w -o ${BIN}/metrics ${METR}/*.c ${METR}/*.h ${UTIL}/files.c ${UTIL}/files.h ${UTIL}/macros.h ${UTIL}/cpu.h ${UTIL}/cpu.c
 
 clean:

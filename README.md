@@ -1,5 +1,10 @@
 # thesis
 
+## Software versions used
+ - `ghc`: `8.8.4`
+ - `gcc`: `11.2.0`
+
+___
 ## Setup
 
 Compile tool binaries
@@ -19,7 +24,7 @@ cd ..
 Switch `nofib`'s original `target.mk` for modified version
 ```
 cp src/nofib/target.mk nofib/mk/target.mk
-``` 
+```
 
 Install packages required by `nofib` benchmarks
 ```
@@ -27,12 +32,31 @@ cabal v1-install --allow-newer -w ghc random parallel old-time
 cabal v1-install regex-compat
 ```
 
+Install `lm-sensors` required to measure the CPUs temperature
+```
+sudo apt update
+sudo apt install lm-sensors
+```
+
+One more thing, compile `runstdtest`
+```
+cd nofib/runstdtest
+make
+```
+
 ___
 ## Usage
 
-If everything is setup correctly you just need to run the `metrics` binary with root permissions, and the tool will start executing. `sudo` is required in order for `RAPL` to work.
+Before running the tool we need to generate the input files for the benchmarks, `nofib`'s Makefile system provides a way to that
 ```
-sudo ./metrics
+cd nofib
+make boot
+```
+
+If everything is setup correctly and the input files have been generated, you just need to run the `metrics` binary with root permissions, and the tool will start executing. <br>
+**IMPORTANT:** `sudo` is required in order for `RAPL` to work
+```
+sudo ./bin/metrics
 ```
 
 ___
@@ -68,18 +92,20 @@ sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\" >null 2>null"
 
 ___
 ## Troubleshooting
+
+
 I had some trouble getting the `cabal` packages to work right away, here are the versions I used:
 ```
-old-locale-1.0.0.7
-old-time-1.1.0.3
-parallel-3.2.2.0
-primitive-0.7.4.0
-random-1.2.1.1
-regex-base-0.94.0.2
-regex-compat-0.95.2.1
-regex-posix-0.96.0.1
-splitmix-0.1.0.4
-unboxed-ref-0.4.0.0
+cabal v1-install old-locale-1.0.0.7
+cabal v1-install old-time-1.1.0.3
+cabal v1-install parallel-3.2.2.0
+cabal v1-install primitive-0.7.4.0
+cabal v1-install random-1.2.1.1
+cabal v1-install regex-base-0.94.0.2
+cabal v1-install regex-compat-0.95.2.1
+cabal v1-install regex-posix-0.96.0.1
+cabal v1-install splitmix-0.1.0.4
+cabal v1-install unboxed-ref-0.4.0.0
 ```
 
 <br>
@@ -92,6 +118,10 @@ sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\"", runs, flag)
 // to something like this
 sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d -O0 %s\"", runs, flag);
 ```
+
+<br>
+
+### Handling `ghc` versions
 
 ___
 ## Available Data
