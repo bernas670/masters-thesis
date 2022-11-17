@@ -28,8 +28,8 @@ cp src/nofib/target.mk nofib/mk/target.mk
 
 Install packages required by `nofib` benchmarks
 ```
-cabal v1-install --allow-newer -w ghc random parallel old-time
-cabal v1-install regex-compat
+cabal v1-install --allow-newer -w ghc 
+cabal v1-install old-locale-1.0.0.7 old-time-1.1.0.3 parallel-3.2.2.0 primitive-0.7.4.0 random-1.2.1.1 regex-base-0.94.0.2 regex-compat-0.95.2.1 regex-posix-0.96.0.1 splitmix-0.1.0.4 unboxed-ref-0.4.0.0
 ```
 
 Install `lm-sensors` required to measure the CPUs temperature
@@ -93,23 +93,7 @@ sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\" >null 2>null"
 ___
 ## Troubleshooting
 
-
-I had some trouble getting the `cabal` packages to work right away, here are the versions I used:
-```
-cabal v1-install old-locale-1.0.0.7
-cabal v1-install old-time-1.1.0.3
-cabal v1-install parallel-3.2.2.0
-cabal v1-install primitive-0.7.4.0
-cabal v1-install random-1.2.1.1
-cabal v1-install regex-base-0.94.0.2
-cabal v1-install regex-compat-0.95.2.1
-cabal v1-install regex-posix-0.96.0.1
-cabal v1-install splitmix-0.1.0.4
-cabal v1-install unboxed-ref-0.4.0.0
-```
-
-<br>
-
+### Disabling benchmark outputs
 Another issue I ran into was the package database not being found. The file can be found at `~/.ghc/<ghc-version>/package.conf.d`. To fix this issue go into `src/metrics_fw/ghc.c` and change line 24:
 ```c
 // from this
@@ -119,10 +103,13 @@ sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-O0 %s\"", runs, flag)
 sprintf(make_cmd, "sudo make NoFibRuns=%d EXTRA_HC_OPTS=\"-package-db /home/rapi/.ghc/x86_64-linux-8.6.5/package.conf.d -O0 %s\"", runs, flag);
 ```
 
-<br>
-
 ### Handling `ghc` versions
-
+Install [`ghcup`](https://www.haskell.org/ghcup/), the desired `ghc` version and set it
+```
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+ghcup install 8.8.4
+ghcup set 8.8.4
+```
 ___
 ## Available Data
 
